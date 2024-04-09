@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct ElementType
-{
+typedef struct ElementType {
     int value;
 } ElemType;
 
@@ -10,7 +9,7 @@ typedef struct ElementType
 typedef struct SeqList{
     ElemType Data[MaxSize];
     int Length;
-}SqList;
+} SqList;
 
 void InitList(SqList *L) {
     L->Length = 0;
