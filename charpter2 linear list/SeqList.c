@@ -8,7 +8,8 @@ typedef struct ElementType
 } ElemType;
 
 #define MaxSize 100
-#define InitSize 50
+#define InitSize 100
+
 typedef struct SeqList
 {
     ElemType *Data;
@@ -25,32 +26,11 @@ void InitList(SeqList *L)
 
 bool ListInsert(SeqList *L, int i, ElemType E)
 {
-    // 如果index属性设置不正确
-    if (i < 1 || i > L->MaxLength + 1)
+    if (i < 1 || i > L->Length + 1 || L->Length >= MaxSize)
     {
         return false;
     }
-    // 如果i超过了Length，或者Length+1大于了当前的Size，需要扩容List
-    if (i > L->Length || L->Length + 1 > sizeof(L->Data) / sizeof(ElemType))
-    {
-        // 如果扩容之后的大小超过了最大长度就要直接返回错误
-        // 目前定义扩容的方式是将长度*2，或者刚好扩容到i的位置（如果是第一次的话）
-        int CurrentAllocSize = L->Length == 0 ? i : L->Length << 1;
-        if (CurrentAllocSize > MaxSize)
-        {
-            return false;
-        }
-        ElemType *temp = (ElemType *)malloc(sizeof(ElemType) * CurrentAllocSize);
-        for (int j = 0; j < L->Length - 1; j++)
-        {
-            temp[j] = L->Data[j];
-        }
-        free(L->Data);
-        L->Data = temp;
-        L->Length = CurrentAllocSize;
-    }
-    // 从i开始每一个都往后挪一位
-    for (int j = L->Length - 1; j >= i; j--)
+    for (int j = L->Length; j >= i; j--)
     {
         L->Data[j] = L->Data[j - 1];
     }
@@ -59,16 +39,57 @@ bool ListInsert(SeqList *L, int i, ElemType E)
     return true;
 }
 
+bool ListDelete(SeqList *L, int i, ElemType *E) {
+    if (i < 1 || i > L->Length)
+    {
+        return false;
+    }
+    *E = L->Data[i - 1];
+    for (int j = i - 1; j < L->Length - 1; j++){
+        L->Data[j] = L->Data[j + 1];
+    }
+    L->Length--;
+    return true;
+}
+
+int LocateItem(SeqList *L, ElemType E) {
+    int i;
+    for (i = 0; i < L->Length; i++) {
+        if (L->Data[i].value == E.value) 
+            return i + 1;
+    }
+    return 0;
+}
+
+void show(SeqList *L)
+{
+    for (int i = 0; i < L->Length; i++)
+    {
+        if (L->Data[i].value != 0) {
+            printf("index:%d, p:%p, value:%d\n", i + 1, &L->Data[i], L->Data[i].value);
+        }
+    }
+}
+
 int main()
 {
     SeqList L = {};
     InitList(&L);
+
     ElemType E = {10};
     ListInsert(&L, 1, E);
-    for (int i = 0; i < L.Length; i++)
-    {
-        printf("下标:%d,值:%s", L.Data[i], L.Data[i].value);
-    }
 
+    ElemType E2 = {20};
+    ListInsert(&L, 1, E2);
+    show(&L);
+
+    // ElemType E3;
+    // ListDelete(&L, 1, &E3);
+    // show(&L);
+    E.value = 30;
+    int index = LocateItem(&L, E);
+    printf("locate item index:%d", index);
+
+    free(L.Data);
     return 0;
 }
