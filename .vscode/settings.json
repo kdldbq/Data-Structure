@@ -55,5 +55,16 @@
   "C_Cpp_Runner.useLeakSanitizer": false,
   "C_Cpp_Runner.showCompilationTime": false,
   "C_Cpp_Runner.useLinkTimeOptimization": false,
-  "C_Cpp_Runner.msvcSecureNoWarnings": false
+  "C_Cpp_Runner.msvcSecureNoWarnings": false,
+  "graalvm.home": "",
+  "graalvm.installations": [
+    ""
+  ],
+  "terminal.integrated.env.windows": {
+    "GRAALVM_HOME": ""
+  },
+  "files.associations": {
+    "minimaldistance": "c"
+  },
+  "java.configuration.runtimes": []
 }
